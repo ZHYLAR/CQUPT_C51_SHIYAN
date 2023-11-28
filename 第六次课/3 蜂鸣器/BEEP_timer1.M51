@@ -1,0 +1,185 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    11/20/2023  19:24:42  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+E:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, beep_timer1.obj TO BEEP_timer1 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  beep_timer1.obj (BEEP_TIMER1)
+  E:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  BEEP_timer1 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         ?DT?BEEP_TIMER1
+            DATA    000EH     0002H     UNIT         ?DT?_DELAY1MS?BEEP_TIMER1
+            IDATA   0010H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0009H     UNIT         ?C_INITSEG
+                    0017H     0004H                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    00AAH     001FH     UNIT         ?PR?_DELAY1MS?BEEP_TIMER1
+            CODE    00C9H     001EH     UNIT         ?PR?DELAY?BEEP_TIMER1
+            CODE    00E7H     001BH     UNIT         ?PR?MAIN?BEEP_TIMER1
+            CODE    0102H     0013H     UNIT         ?PR?TIME1?BEEP_TIMER1
+
+
+
+OVERLAY MAP OF MODULE:   BEEP_timer1 (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?BEEP_TIMER1
+  +--> ?C_INITSEG
+
+
+
+SYMBOL TABLE OF MODULE:  BEEP_timer1 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/20/2023  19:24:42  PAGE 2
+
+
+  C:001EH         SEGMENT       ?C_C51STARTUP
+  I:0010H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0021H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0000H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:001EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         92
+  C:001EH         LINE#         99
+  C:0020H         LINE#         100
+  C:0021H         LINE#         101
+  C:0022H         LINE#         102
+  C:0024H         LINE#         151
+  C:0027H         LINE#         155
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        BEEP_TIMER1
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:00AAH         PUBLIC        _Delay1ms
+  B:00A8H.7       PUBLIC        EA
+  D:0008H         PUBLIC        USE_C
+  C:00C9H         PUBLIC        delay
+  D:000AH         PUBLIC        flag
+  C:00E7H         PUBLIC        main
+  D:0089H         PUBLIC        TMOD
+  C:0102H         PUBLIC        Time1
+  D:000CH         PUBLIC        mmm
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  B:0090H.5       PUBLIC        Beep
+  -------         PROC          _DELAY1MS
+  D:0006H         SYMBOL        m
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/20/2023  19:24:42  PAGE 3
+
+
+  D:000EH         SYMBOL        i
+  D:000FH         SYMBOL        j
+  -------         ENDDO         
+  C:00AAH         LINE#         17
+  C:00AAH         LINE#         18
+  C:00AAH         LINE#         19
+  C:00B2H         LINE#         20
+  C:00B2H         LINE#         23
+  C:00B3H         LINE#         24
+  C:00B4H         LINE#         25
+  C:00B5H         LINE#         26
+  C:00B8H         LINE#         27
+  C:00BBH         LINE#         29
+  C:00BBH         LINE#         30
+  C:00BEH         LINE#         31
+  C:00C1H         LINE#         32
+  C:00C8H         LINE#         33
+  -------         ENDPROC       _DELAY1MS
+  -------         PROC          MAIN
+  C:00E7H         LINE#         40
+  C:00E7H         LINE#         41
+  C:00E7H         LINE#         42
+  C:00EAH         LINE#         43
+  C:00EDH         LINE#         44
+  C:00F0H         LINE#         45
+  C:00F3H         LINE#         46
+  C:00F6H         LINE#         47
+  C:00F8H         LINE#         48
+  C:00FAH         LINE#         49
+  C:00FCH         LINE#         50
+  C:00FEH         LINE#         51
+  C:0100H         LINE#         53
+  -------         ENDPROC       MAIN
+  -------         PROC          TIME1
+  C:0102H         LINE#         60
+  C:0104H         LINE#         62
+  C:010AH         LINE#         63
+  C:010CH         LINE#         64
+  C:010FH         LINE#         65
+  C:0112H         LINE#         66
+  C:0112H         LINE#         67
+  -------         ENDPROC       TIME1
+  -------         PROC          DELAY
+  C:00C9H         LINE#         69
+  C:00CBH         LINE#         71
+  C:00D3H         LINE#         72
+  C:00D9H         LINE#         73
+  C:00DEH         LINE#         74
+  C:00E1H         LINE#         75
+  C:00E4H         LINE#         76
+  -------         ENDPROC       DELAY
+  -------         ENDMOD        BEEP_TIMER1
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY1MS?BEEP_TIMER1
+
+Program Size: data=17.0 xdata=0 code=265
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/20/2023  19:24:42  PAGE 4
+
+
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,60 @@
+C51 COMPILER V9.54   MAIN                                                                  11/21/2023 14:51:57 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //#include <REGX51.H>
+   2          #include <reg52.h>
+   3          sbit LED0 = P2^0;  // ??LED0?????
+   4          sbit LED7 = P2^7;  // ??LED7?????
+   5          unsigned int cnt0 = 0;
+   6          unsigned int cnt7 = 0;
+   7          
+   8          void timer0_ISR() interrupt 1 {
+   9   1          cnt0++;
+  10   1          cnt7++;
+  11   1      
+  12   1          if (cnt0 == 2500*2) {  // LED0??1???
+  13   2              cnt0 = 0;
+  14   2              LED0 = ~LED0;
+  15   2          }
+  16   1      
+  17   1          if (cnt7 == 12500*2) {  // LED7??5???
+  18   2              cnt7 = 0;
+  19   2              LED7 = ~LED7;
+  20   2          }
+  21   1          TL0 = 0x38;
+  22   1      }
+  23          
+  24          void main() {
+  25   1          LED0 = 0;
+  26   1          LED7 = 0;
+  27   1          TMOD = 0x03;  // ?????T0?????3
+  28   1          //TH0 = 0xFC;   // ???????,??1ms
+  29   1          TL0 = 0x38;
+  30   1          ET0 = 1;      // ?????T0?????
+  31   1          TR0 = 1;      // ?????T0
+  32   1          EA = 1;       // ?????
+  33   1          while(1) {
+  34   2              // ????????????
+  35   2          }
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     82    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

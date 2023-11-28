@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"beep_timer1.obj" 
+TO "BEEP_timer1" 
+RAMSIZE(256) 
