@@ -1,0 +1,86 @@
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:45:45 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //波特率2400、接收8位学号显示在数码管
+   2          #include <REGX52.H>
+   3          #include "Delay.h"
+   4          #include "UART.h"
+   5          unsigned char NI[9]={0xfe,0xfd,0xfb,0xf7,0xed,0xdf,0xbf,0x7f,0x00};
+   6          unsigned char a,b;
+   7          char key=0;
+   8          //sbit BEEP = P1^5;
+   9          unsigned char arr[8]={0,0,0,0,0,0,0,0};
+  10          unsigned char index;
+  11          
+  12          unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+  13          
+  14          void Nixie(unsigned char Location,Number)
+  15          {
+  16   1        switch(Location)
+  17   1        {
+  18   2          case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  19   2          case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  20   2          case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  21   2          case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  22   2          case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  23   2          case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  24   2          case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  25   2          case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  26   2        }
+  27   1        P0=NixieTable[Number];  
+  28   1        Delay(1);       
+  29   1        P0=0x00;        
+  30   1      }
+  31          
+  32          void main()
+  33          {
+  34   1        UART_Init();    //串口初始化
+  35   1        P2 = 0XFF;
+  36   1        //UART_SendByte(0xff);
+  37   1        while(1)
+  38   1        {
+  39   2          for(b=1;b<=8;b++){
+  40   3            Nixie(9-b,arr[b-1]);
+  41   3          }
+  42   2        }
+  43   1      }
+  44          
+  45          void UART_Routine() interrupt 4
+  46          {
+  47   1        if(RI==1)         //如果接收标志位为1，接收到了数据
+  48   1        {
+  49   2          //UART_SendByte(SBUF);
+  50   2          for(a=7;a>0;a--){
+  51   3            arr[a] = arr[a-1];
+  52   3          }
+  53   2          arr[0] = SBUF;
+  54   2          
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:45:45 PAGE 2   
+
+  55   2          for(index=0;index<8;index++){
+  56   3            UART_SendByte(arr[index]);
+  57   3          }
+  58   2          RI=0;         //接收标志位清0
+  59   2        }
+  60   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    253    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     31    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

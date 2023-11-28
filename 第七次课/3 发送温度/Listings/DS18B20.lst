@@ -1,0 +1,64 @@
+C51 COMPILER V9.54   DS18B20                                                               11/28/2023 14:34:12 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\Objects\DS18B20.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE DS18B20.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\DS18B
+                    -20.lst) TABS(2) OBJECT(.\Objects\DS18B20.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "OneWire.h"
+   3          
+   4          //DS18B20指令
+   5          #define DS18B20_SKIP_ROM      0xCC
+   6          #define DS18B20_CONVERT_T     0x44
+   7          #define DS18B20_READ_SCRATCHPAD   0xBE
+   8          
+   9          /*  * @brief  DS18B20读取温度
+  10            * @param  无
+  11            * @retval 温度数值
+  12            */
+  13          float DS18B20_ReadT(void)
+  14          {
+  15   1        unsigned char TLSB,TMSB;
+  16   1        int Temp;
+  17   1        float T;
+  18   1        OneWire_Init();
+  19   1        OneWire_SendByte(DS18B20_SKIP_ROM);
+  20   1        OneWire_SendByte(DS18B20_READ_SCRATCHPAD);
+  21   1        TLSB=OneWire_ReceiveByte();
+  22   1        TMSB=OneWire_ReceiveByte();
+  23   1        Temp=(TMSB<<8)|TLSB;
+  24   1        T=Temp/16.0;
+  25   1        return T;
+  26   1      }
+  27          
+  28          /**
+  29            * @brief  DS18B20开始温度变换
+  30            * @param  无
+  31            * @retval 无
+  32            */
+  33          void DS18B20_ConvertT(void)
+  34          {
+  35   1        OneWire_Init();
+  36   1        OneWire_SendByte(DS18B20_SKIP_ROM);
+  37   1        OneWire_SendByte(DS18B20_CONVERT_T);
+  38   1      }
+  39          
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     57    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

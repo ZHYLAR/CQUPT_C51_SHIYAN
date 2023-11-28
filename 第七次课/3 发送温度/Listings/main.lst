@@ -1,0 +1,73 @@
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 14:34:12 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "Delay.h"
+   2          #include "UART.h"
+   3          #include "DS18B20.h"
+   4          #include <REGX52.H>
+   5          
+   6          float T;
+   7          unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+   8          
+   9          void Nixie(unsigned char Location,Number)
+  10          {
+  11   1        switch(Location)    //位码输出
+  12   1        {
+  13   2          case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  14   2          case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  15   2          case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  16   2          case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  17   2          case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  18   2          case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  19   2          case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  20   2          case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  21   2        }
+  22   1        P0=NixieTable[Number];  //段码输出
+  23   1        Delay(1);       //显示一段时间
+  24   1        P0=0x00;        //段码清0，消影
+  25   1      }
+  26          
+  27          void main()
+  28          {
+  29   1        int i = 0;
+  30   1        DS18B20_ConvertT();   //上电先转换一次温度，防止第一次读数据错误
+  31   1        Delay(1000);      //等待转换完成
+  32   1        T=DS18B20_ReadT();  //读取温度
+  33   1        UART_Init();      //串口初始化
+  34   1        while(1)
+  35   1        {
+  36   2          DS18B20_ConvertT(); //转换温度
+  37   2           T=DS18B20_ReadT(); //读取温度
+  38   2          UART_SendByte((int)T/10+48);  //串口发送一个字节
+  39   2          UART_SendByte((int)T%10+48);  //串口发送一个字节
+  40   2          UART_SendByte(32);  //串口发送一个字节
+  41   2      //    for(i=500;i>0;i--){
+  42   2      //    Nixie(2,(int)T%10);
+  43   2      //    Nixie(1,(int)T/10);
+  44   2      //    }
+  45   2          Delay(1000);    //延时1秒
+  46   2        }
+  47   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    208    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 14:34:12 PAGE 2   
+
+   DATA SIZE        =     14       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

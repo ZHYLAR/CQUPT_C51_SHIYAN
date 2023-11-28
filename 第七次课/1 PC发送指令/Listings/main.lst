@@ -1,0 +1,128 @@
+C51 COMPILER V9.54   MAIN                                                                  11/23/2023 22:38:34 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "UART.h"
+   4          unsigned char NI[9]={0xfe,0xfd,0xfb,0xf7,0xed,0xdf,0xbf,0x7f,0x00};
+   5          char key=0;
+   6          sbit BEEP = P1^5;
+   7          unsigned int a=0;
+   8          char arr[5]={0,0,0,0};
+   9          char j = 0,index;
+  10          void shanshuo(){
+  11   1          P2 = 0xff;
+  12   1          Delay(200);
+  13   1          P2 = 0;
+  14   1          Delay(200); 
+  15   1        
+  16   1      }
+  17          
+  18          /*1000hz, 1ms响铃一次， 
+  19          */
+  20          void beep(){
+  21   1        while(a){
+  22   2            BEEP = 1;
+  23   2            Delay(1);
+  24   2            BEEP = 0;
+  25   2            Delay(1);
+  26   2            UART_Init();
+  27   2            a=SBUF;
+  28   2        }
+  29   1      }
+  30          
+  31          void main()
+  32          {
+  33   1        UART_Init();    //串口初始化
+  34   1        P2 = 0XFF;
+  35   1        
+  36   1        while(1)
+  37   1        {
+  38   2          //P2 = 0;
+  39   2          if(arr[3]==0x01&&arr[2]==0x23&&arr[1]==0x45&&arr[0]==0x67)
+  40   2            {
+  41   3              for(index=0;index<10;index++){
+  42   4                shanshuo();
+  43   4              }
+  44   3              for(index=0;index<4;index++){
+  45   4                arr[index] = 0;
+  46   4                P2 = 0xff;
+  47   4              }
+  48   3            }
+  49   2        }
+  50   1      }
+  51          
+  52          void UART_Routine() interrupt 4
+  53          {
+  54   1        if(RI==1)         //如果接收标志位为1，接收到了数据
+C51 COMPILER V9.54   MAIN                                                                  11/23/2023 22:38:34 PAGE 2   
+
+  55   1        {
+  56   2          arr[3] = arr[2];
+  57   2          arr[2] = arr[1];
+  58   2          arr[1] = arr[0];
+  59   2          arr[0] = SBUF;
+  60   2          a=SBUF;
+  61   2          if(SBUF==1)
+  62   2          {
+  63   3            P2=NI[0];
+  64   3          }
+  65   2          if(SBUF==2)
+  66   2          {
+  67   3            P2=NI[1];
+  68   3          }
+  69   2          if(SBUF==3)
+  70   2          {
+  71   3            P2=NI[2];
+  72   3          }
+  73   2          if(SBUF==4)
+  74   2          {
+  75   3            P2=NI[3];
+  76   3          }
+  77   2          if(SBUF==5)
+  78   2          {
+  79   3            P2=NI[4];
+  80   3          }
+  81   2          if(SBUF==6)
+  82   2          {
+  83   3            P2=NI[5];
+  84   3          }
+  85   2          if(SBUF==7)
+  86   2          {
+  87   3            P2=NI[6];
+  88   3          }
+  89   2          if(SBUF==0x11)
+  90   2          {
+  91   3            beep();
+  92   3          }
+  93   2          if(SBUF==0){
+  94   3            
+  95   3          }
+  96   2          for(index=0;index<4;index++){
+  97   3            UART_SendByte(arr[index]);
+  98   3          }
+  99   2            //将受到的数据发回串口
+ 100   2          RI=0;         //接收标志位清0
+ 101   2        }
+ 102   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    293    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     19    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

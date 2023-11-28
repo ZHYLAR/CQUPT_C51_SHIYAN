@@ -1,0 +1,387 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/28/2023  14:34:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\C51\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\Delay.obj, .\Objects\UART.obj, .\Objects\DS18B20.obj, .\Objects\On
+>> eWire.obj TO .\Objects\Project PRINT (.\Listings\Project.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\Delay.obj (DELAY)
+  .\Objects\UART.obj (UART)
+  .\Objects\DS18B20.obj (DS18B20)
+  .\Objects\OneWire.obj (ONEWIRE)
+  E:\C51\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  E:\C51\C51\LIB\C51FPS.LIB (?C?FCAST)
+  E:\C51\C51\LIB\C51FPS.LIB (?C?CASTF)
+  E:\C51\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  E:\C51\C51\LIB\C51S.LIB (?C_STARTUP)
+  E:\C51\C51\LIB\C51S.LIB (?C?SIDIV)
+  E:\C51\C51\LIB\C51S.LIB (?C?LNEG)
+  E:\C51\C51\LIB\C51S.LIB (?C_INIT)
+  E:\C51\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\Project (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000EH     UNIT         ?DT?MAIN
+            DATA    0016H     0003H     UNIT         _DATA_GROUP_
+            IDATA   0019H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     01F8H     UNIT         ?C?LIB_CODE
+            CODE    01FBH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0287H     006DH     UNIT         ?PR?_NIXIE?MAIN
+            CODE    02F4H     0063H     UNIT         ?PR?MAIN?MAIN
+            CODE    0357H     002CH     UNIT         ?PR?DS18B20_READT?DS18B20
+            CODE    0383H     001EH     UNIT         ?PR?ONEWIRE_INIT?ONEWIRE
+            CODE    03A1H     001DH     UNIT         ?PR?ONEWIRE_RECEIVEBYTE?ONEWIRE
+            CODE    03BEH     001CH     UNIT         ?PR?ONEWIRE_RECEIVEBIT?ONEWIRE
+            CODE    03DAH     0019H     UNIT         ?PR?_ONEWIRE_SENDBYTE?ONEWIRE
+            CODE    03F3H     0017H     UNIT         ?PR?UART_INIT?UART
+            CODE    040AH     0016H     UNIT         ?PR?_ONEWIRE_SENDBIT?ONEWIRE
+            CODE    0420H     0015H     UNIT         ?PR?_DELAY?DELAY
+            CODE    0435H     000DH     UNIT         ?C_INITSEG
+            CODE    0442H     000DH     UNIT         ?PR?DS18B20_CONVERTT?DS18B20
+            CODE    044FH     0008H     UNIT         ?PR?_UART_SENDBYTE?UART
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\Project (MAIN)
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 2
+
+
+
+
+SEGMENT                                   DATA_GROUP 
+  +--> CALLED SEGMENT                   START    LENGTH
+-------------------------------------------------------
+?C_C51STARTUP                           -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                           0016H    0002H
+  +--> ?PR?DS18B20_CONVERTT?DS18B20
+  +--> ?PR?_DELAY?DELAY
+  +--> ?PR?DS18B20_READT?DS18B20
+  +--> ?PR?UART_INIT?UART
+  +--> ?PR?_UART_SENDBYTE?UART
+
+?PR?DS18B20_CONVERTT?DS18B20            -----    -----
+  +--> ?PR?ONEWIRE_INIT?ONEWIRE
+  +--> ?PR?_ONEWIRE_SENDBYTE?ONEWIRE
+
+?PR?_ONEWIRE_SENDBYTE?ONEWIRE           -----    -----
+  +--> ?PR?_ONEWIRE_SENDBIT?ONEWIRE
+
+?PR?DS18B20_READT?DS18B20               0018H    0001H
+  +--> ?PR?ONEWIRE_INIT?ONEWIRE
+  +--> ?PR?_ONEWIRE_SENDBYTE?ONEWIRE
+  +--> ?PR?ONEWIRE_RECEIVEBYTE?ONEWIRE
+
+?PR?ONEWIRE_RECEIVEBYTE?ONEWIRE         -----    -----
+  +--> ?PR?ONEWIRE_RECEIVEBIT?ONEWIRE
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Project (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0287H         PUBLIC        _Nixie
+  D:0080H         PUBLIC        P0
+  B:00A0H.2       PUBLIC        P2_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:00A0H.4       PUBLIC        P2_4
+  C:02F4H         PUBLIC        main
+  D:0008H         PUBLIC        T
+  D:000CH         PUBLIC        NixieTable
+  -------         PROC          _NIXIE
+  D:0007H         SYMBOL        Location
+  D:0004H         SYMBOL        Number
+  C:0287H         LINE#         9
+  C:0287H         LINE#         10
+  C:0287H         LINE#         11
+  C:02B4H         LINE#         12
+  C:02B4H         LINE#         13
+  C:02B8H         LINE#         14
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 3
+
+
+  C:02BCH         LINE#         15
+  C:02C0H         LINE#         16
+  C:02C4H         LINE#         17
+  C:02CCH         LINE#         18
+  C:02D4H         LINE#         19
+  C:02DCH         LINE#         20
+  C:02E2H         LINE#         21
+  C:02E2H         LINE#         22
+  C:02E9H         LINE#         23
+  C:02F0H         LINE#         24
+  C:02F3H         LINE#         25
+  -------         ENDPROC       _NIXIE
+  -------         PROC          MAIN
+  -------         DO            
+  D:0016H         SYMBOL        i
+  -------         ENDDO         
+  C:02F4H         LINE#         27
+  C:02F4H         LINE#         28
+  C:02F4H         LINE#         29
+  C:02F9H         LINE#         30
+  C:02FCH         LINE#         31
+  C:0303H         LINE#         32
+  C:030EH         LINE#         33
+  C:0311H         LINE#         34
+  C:0311H         LINE#         35
+  C:0311H         LINE#         36
+  C:0314H         LINE#         37
+  C:031FH         LINE#         38
+  C:0330H         LINE#         39
+  C:0349H         LINE#         40
+  C:034EH         LINE#         45
+  C:0355H         LINE#         46
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0420H         PUBLIC        _Delay
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0420H         LINE#         2
+  C:0420H         LINE#         3
+  C:0420H         LINE#         5
+  C:042AH         LINE#         6
+  C:042AH         LINE#         7
+  C:042CH         LINE#         8
+  C:042EH         LINE#         10
+  C:042EH         LINE#         11
+  C:0430H         LINE#         12
+  C:0432H         LINE#         13
+  C:0434H         LINE#         14
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        DELAY
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 4
+
+
+
+  -------         MODULE        UART
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:0098H.1       PUBLIC        TI
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  C:03F3H         PUBLIC        UART_Init
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  C:044FH         PUBLIC        _UART_SendByte
+  B:00A8H.3       PUBLIC        ET1
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  B:0088H.6       PUBLIC        TR1
+  -------         PROC          UART_INIT
+  C:03F3H         LINE#         8
+  C:03F3H         LINE#         9
+  C:03F3H         LINE#         10
+  C:03F6H         LINE#         11
+  C:03F9H         LINE#         12
+  C:03FCH         LINE#         13
+  C:03FFH         LINE#         14
+  C:0402H         LINE#         15
+  C:0405H         LINE#         16
+  C:0407H         LINE#         17
+  C:0409H         LINE#         18
+  -------         ENDPROC       UART_INIT
+  -------         PROC          _UART_SENDBYTE
+  D:0007H         SYMBOL        Byte
+  C:044FH         LINE#         25
+  C:044FH         LINE#         26
+  C:044FH         LINE#         27
+  C:0451H         LINE#         28
+  C:0454H         LINE#         29
+  C:0456H         LINE#         30
+  -------         ENDPROC       _UART_SENDBYTE
+  -------         ENDMOD        UART
+
+  -------         MODULE        DS18B20
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0442H         PUBLIC        DS18B20_ConvertT
+  C:0357H         PUBLIC        DS18B20_ReadT
+  -------         PROC          DS18B20_READT
+  -------         DO            
+  D:0018H         SYMBOL        TLSB
+  D:0007H         SYMBOL        TMSB
+  D:0006H         SYMBOL        Temp
+  D:0004H         SYMBOL        T
+  -------         ENDDO         
+  C:0357H         LINE#         13
+  C:0357H         LINE#         14
+  C:0357H         LINE#         18
+  C:035AH         LINE#         19
+  C:035FH         LINE#         20
+  C:0364H         LINE#         21
+  C:0369H         LINE#         22
+  C:036CH         LINE#         23
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 5
+
+
+  C:0371H         LINE#         24
+  C:0382H         LINE#         25
+  C:0382H         LINE#         26
+  -------         ENDPROC       DS18B20_READT
+  -------         PROC          DS18B20_CONVERTT
+  C:0442H         LINE#         33
+  C:0442H         LINE#         34
+  C:0442H         LINE#         35
+  C:0445H         LINE#         36
+  C:044AH         LINE#         37
+  -------         ENDPROC       DS18B20_CONVERTT
+  -------         ENDMOD        DS18B20
+
+  -------         MODULE        ONEWIRE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:03BEH         PUBLIC        OneWire_ReceiveBit
+  B:00B0H.7       PUBLIC        OneWire_DQ
+  C:0383H         PUBLIC        OneWire_Init
+  C:03DAH         PUBLIC        _OneWire_SendByte
+  C:040AH         PUBLIC        _OneWire_SendBit
+  C:03A1H         PUBLIC        OneWire_ReceiveByte
+  -------         PROC          ONEWIRE_INIT
+  -------         DO            
+  D:0007H         SYMBOL        i
+  D:0006H         SYMBOL        AckBit
+  -------         ENDDO         
+  C:0383H         LINE#         11
+  C:0383H         LINE#         12
+  C:0383H         LINE#         15
+  C:0385H         LINE#         16
+  C:0387H         LINE#         17
+  C:0389H         LINE#         18
+  C:038DH         LINE#         19
+  C:038FH         LINE#         20
+  C:0393H         LINE#         21
+  C:0398H         LINE#         22
+  C:039CH         LINE#         23
+  C:039EH         LINE#         24
+  C:03A0H         LINE#         25
+  -------         ENDPROC       ONEWIRE_INIT
+  -------         PROC          _ONEWIRE_SENDBIT
+  D:0007H         SYMBOL        Bit
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:040AH         LINE#         32
+  C:040AH         LINE#         33
+  C:040AH         LINE#         35
+  C:040CH         LINE#         36
+  C:040EH         LINE#         37
+  C:0412H         LINE#         38
+  C:0417H         LINE#         39
+  C:041BH         LINE#         40
+  C:041DH         LINE#         41
+  C:041FH         LINE#         42
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 6
+
+
+  -------         ENDPROC       _ONEWIRE_SENDBIT
+  -------         PROC          ONEWIRE_RECEIVEBIT
+  -------         DO            
+  D:0007H         SYMBOL        i
+  D:0006H         SYMBOL        Bit
+  -------         ENDDO         
+  C:03BEH         LINE#         49
+  C:03BEH         LINE#         50
+  C:03BEH         LINE#         53
+  C:03C0H         LINE#         54
+  C:03C2H         LINE#         55
+  C:03C6H         LINE#         56
+  C:03C8H         LINE#         57
+  C:03CCH         LINE#         58
+  C:03D1H         LINE#         59
+  C:03D5H         LINE#         60
+  C:03D7H         LINE#         61
+  C:03D9H         LINE#         62
+  -------         ENDPROC       ONEWIRE_RECEIVEBIT
+  -------         PROC          _ONEWIRE_SENDBYTE
+  D:0005H         SYMBOL        Byte
+  -------         DO            
+  D:0004H         SYMBOL        i
+  -------         ENDDO         
+  C:03DAH         LINE#         69
+  C:03DCH         LINE#         70
+  C:03DCH         LINE#         72
+  C:03DEH         LINE#         73
+  C:03DEH         LINE#         74
+  C:03EEH         LINE#         75
+  C:03F2H         LINE#         76
+  -------         ENDPROC       _ONEWIRE_SENDBYTE
+  -------         PROC          ONEWIRE_RECEIVEBYTE
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0005H         SYMBOL        Byte
+  -------         ENDDO         
+  C:03A1H         LINE#         83
+  C:03A1H         LINE#         84
+  C:03A1H         LINE#         86
+  C:03A3H         LINE#         87
+  C:03A4H         LINE#         88
+  C:03A4H         LINE#         89
+  C:03B7H         LINE#         90
+  C:03BBH         LINE#         91
+  C:03BDH         LINE#         92
+  -------         ENDPROC       ONEWIRE_RECEIVEBYTE
+  -------         ENDMOD        ONEWIRE
+
+  -------         MODULE        ?C?FPDIV
+  C:0006H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?FCAST
+  C:00ADH         PUBLIC        ?C?FCASTC
+  C:00A8H         PUBLIC        ?C?FCASTI
+  C:00A3H         PUBLIC        ?C?FCASTL
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2023  14:34:12  PAGE 7
+
+
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:00E1H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?SIDIV
+  C:0162H         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:0198H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?UIDIV
+  C:01A6H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_NIXIE?MAIN
+
+Program Size: data=26.0 xdata=0 code=1111
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)
