@@ -1,0 +1,58 @@
+C51 COMPILER V9.54   MAIN                                                                  10/31/2023 16:38:11 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "Delay.h"
+   4          #include "MatrixKey.h"
+   5          
+   6            //LCD_ShowChar(1,1,'A');      //在1行1列显示字符A
+   7            //LCD_ShowString(1,3,"Hello");  //在1行3列显示字符串Hello
+   8            //LCD_ShowNum(1,9,1,1);     //在1行9列显示数字66，长度为2
+   9            //LCD_ShowSignedNum(1,12,-88,2);  //在1行12列显示有符号数字-88，长度为2
+  10            //LCD_ShowHexNum(2,1,0xA5,2);   //在2行1列显示十六进制数字0xA5，长度为2
+  11            //LCD_ShowBinNum(2,4,0xA5,8);   //在2行4列显示二进制数字0xA5，长度为8
+  12          //  LCD_ShowChar(2,13,0xDF);    //在2行13列显示编码为0xDF的字符
+  13            //LCD_ShowChar(2,14,'C');     //在2行14列显示字符C
+  14            
+  15          void main()
+  16          {
+  17   1        int KeyNum=0;//-1 represent that no num is sent
+  18   1        int i=1;
+  19   1        LCD_Init();           //LCD初始化
+  20   1        
+  21   1        while(1)
+  22   1        {
+  23   2          KeyNum=MatrixKey()-1;
+  24   2          if(KeyNum>=0){
+  25   3            LCD_ShowNum(1,i,KeyNum,1);
+  26   3            KeyNum=-1;
+  27   3            i++;
+  28   3          }
+  29   2          if(i==12){
+  30   3            LCD_ShowString(1,1,"               ");
+  31   3            i=1;
+  32   3          }
+  33   2        }
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     90    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

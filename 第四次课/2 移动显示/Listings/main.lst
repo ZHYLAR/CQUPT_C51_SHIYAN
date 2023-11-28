@@ -1,0 +1,91 @@
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 15:02:56 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "Delay.h"
+   4          #include "MatrixKey.h"
+   5          
+   6            //LCD_ShowChar(1,1,'A');      //在1行1列显示字符A
+   7            //LCD_ShowString(1,3,"Hello");  //在1行3列显示字符串Hello
+   8            //LCD_ShowNum(1,9,1,1);     //在1行9列显示数字66，长度为2
+   9            //LCD_ShowSignedNum(1,12,-88,2);  //在1行12列显示有符号数字-88，长度为2
+  10            //LCD_ShowHexNum(2,1,0xA5,2);   //在2行1列显示十六进制数字0xA5，长度为2
+  11            //LCD_ShowBinNum(2,4,0xA5,8);   //在2行4列显示二进制数字0xA5，长度为8
+  12          //  LCD_ShowChar(2,13,0xDF);    //在2行13列显示编码为0xDF的字符
+  13            //LCD_ShowChar(2,14,'C');     //在2行14列显示字符C
+  14          
+  15          
+  16          #include <string.h>
+  17          void substring(const char* input, char* output, int a, int b) {
+  18   1          int len = strlen(input);
+  19   1          int index = 0;  // 输出字符串的索引
+  20   1          int i;
+  21   1          if (a < 0) {
+  22   2              a = 0;
+  23   2          }
+  24   1          if (b >= len) {
+  25   2              b = len - 1;
+  26   2          }
+  27   1          if (a > b) {
+  28   2              for (i = a; i < len && index < 16; i++) {
+  29   3                  output[index++] = input[i];
+  30   3              }
+  31   2              for (i = 0; i <= b && index < 16; i++) {
+  32   3                  output[index++] = input[i];
+  33   3              }
+  34   2          } else {
+  35   2              for (i = a; i <= b && index < 16; i++) {
+  36   3                  output[index++] = input[i];
+  37   3              }
+  38   2          }
+  39   1          output[index] = '\0';  // 手动添加字符串结束符
+  40   1      }
+  41          
+  42          
+  43          
+  44          void main()
+  45          {
+  46   1        char list[] = "welcome to cqupt   ";
+  47   1        char output[] = "welcome to cqupt";
+  48   1        unsigned char i=0,a=0,b=16;
+  49   1        unsigned char mod;
+  50   1        LCD_Init(); 
+  51   1        //LCD_ShowString(1,0,list);
+  52   1        while(1){
+  53   2          substring(list, output,(0+i)%16,(15+i)%16);
+  54   2          i++;
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 15:02:56 PAGE 2   
+
+  55   2          LCD_ShowString(1,1,output);
+  56   2          Delay(2000);
+  57   2          if(i>16){
+  58   3            i=0;
+  59   3          }
+  60   2        }
+  61   1          
+  62   1          
+  63   1        }
+*** WARNING C280 IN LINE 49 OF main.c: 'mod': unreferenced local variable
+  64          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    499    ----
+   CONSTANT SIZE    =     37    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      57
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
