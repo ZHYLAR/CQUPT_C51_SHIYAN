@@ -1,0 +1,74 @@
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 16:44:00 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "Key.h"
+   4          #include "AT24C02.h"
+   5          #include "Delay.h"
+   6          
+   7          unsigned char KeyNum; 
+   8          int Num,Num2;
+   9          
+  10          void main()
+  11          {
+  12   1        LCD_Init();
+  13   1        LCD_ShowNum(1,1,Num,10);
+  14   1        while(1)
+  15   1        {
+  16   2          KeyNum=Key();
+  17   2          Num = 20222;
+  18   2          Num2 = 10071;
+  19   2          
+  20   2          if(KeyNum==3) //K3按键，向AT24C02写入数据
+  21   2          {
+  22   3            AT24C02_WriteByte(0,Num%256);
+  23   3            Delay(5);
+  24   3            AT24C02_WriteByte(1,Num/256);
+  25   3            Delay(5);
+  26   3            AT24C02_WriteByte(2,Num2%256);
+  27   3            Delay(5);
+  28   3            AT24C02_WriteByte(3,Num2/256);
+  29   3            Delay(5);
+  30   3            
+  31   3            LCD_ShowString(2,1,"Write OK");
+  32   3            Delay(1000);
+  33   3            LCD_ShowString(2,1,"        ");
+  34   3          }
+  35   2          if(KeyNum==4) //K4按键，从AT24C02读取数据
+  36   2          {
+  37   3            Num=AT24C02_ReadByte(0);
+  38   3            Num|=AT24C02_ReadByte(1)<<8;
+  39   3            Num2 = AT24C02_ReadByte(2);
+  40   3            Num2|=AT24C02_ReadByte(3)<<8;
+  41   3            LCD_ShowNum(1,1,Num,5);
+  42   3            LCD_ShowNum(1,6,Num2,5);
+  43   3            LCD_ShowString(2,1,"Read OK ");
+  44   3            Delay(1000);
+  45   3            LCD_ShowString(2,1,"        ");
+  46   3          }
+  47   2        }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    287    ----
+   CONSTANT SIZE    =     27    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 16:44:00 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
