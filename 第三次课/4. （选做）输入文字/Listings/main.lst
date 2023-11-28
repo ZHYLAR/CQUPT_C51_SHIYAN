@@ -1,0 +1,168 @@
+C51 COMPILER V9.54   MAIN                                                                  10/26/2023 01:14:27 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          void Delay(unsigned int xms)
+   4          {
+   5   1        unsigned char i, j;
+   6   1        while(xms--)
+   7   1        {
+   8   2          i = 2;
+   9   2          j = 239;
+  10   2          do
+  11   2          {
+  12   3            while (--j);
+  13   3          } while (--i);
+  14   2        }
+  15   1      }
+  16          
+  17          
+  18          
+  19          unsigned char MatrixKey()
+  20          {
+  21   1        unsigned char KeyNumber=0;
+  22   1        
+  23   1        P1=0xFF;
+  24   1        P1_3=0;
+  25   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=1;}
+  26   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=5;}
+  27   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=9;}
+  28   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=13;}
+  29   1        
+  30   1        P1=0xFF;
+  31   1        P1_2=0;
+  32   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=2;}
+  33   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=6;}
+  34   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=10;}
+  35   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=14;}
+  36   1        
+  37   1        P1=0xFF;
+  38   1        P1_1=0;
+  39   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=3;}
+  40   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=7;}
+  41   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=11;}
+  42   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=15;}
+  43   1        
+  44   1        P1=0xFF;
+  45   1        P1_0=0;
+  46   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=4;}
+  47   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=8;}
+  48   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=12;}
+  49   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=16;}
+  50   1        
+  51   1        return KeyNumber;
+  52   1      }
+  53          
+  54          
+C51 COMPILER V9.54   MAIN                                                                  10/26/2023 01:14:27 PAGE 2   
+
+  55          unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F,0x76,0x40};
+  56          
+  57            //H:0x76 -:0x40
+  58          
+  59          
+  60          
+  61          
+  62          
+  63          void Nixie(unsigned char Location,Number)
+  64          {
+  65   1        if(Location>=1&&Location<=8){
+  66   2        switch(Location)
+  67   2        {
+  68   3          case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  69   3          case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  70   3          case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  71   3          case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  72   3          case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  73   3          case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  74   3          case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  75   3          case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  76   3        }
+  77   2          P0=NixieTable[Number];  
+  78   2          Delay(1);       
+  79   2          P0=0x00;  
+  80   2      }else{
+  81   2          Delay(1);
+  82   2      
+  83   2      }
+  84   1      }
+  85          
+  86          
+  87          void main()
+  88          {
+  89   1        unsigned char i,j=100;
+  90   1        //unsigned int num1=0,num2=0;
+  91   1        char location=0;
+  92   1        unsigned char list[]={0,0,0,0,0,0,0}; 
+  93   1        unsigned char loop = 200;
+  94   1        char KeyNum=-1;//-1 represent that no num is sent
+  95   1        
+  96   1        
+  97   1        
+  98   1        while(1)
+  99   1        {
+ 100   2          KeyNum=MatrixKey()-1;
+ 101   2          
+ 102   2          if(KeyNum>=0&&KeyNum<12){
+ 103   3              list[location]=KeyNum;
+ 104   3              while(loop>0){
+ 105   4                if(KeyNum>=0&&KeyNum<=11) Nixie(8,KeyNum);
+ 106   4                loop--;
+ 107   4              }
+ 108   3              loop = 200;
+ 109   3              location++;
+ 110   3          }
+ 111   2          
+ 112   2        
+ 113   2        
+ 114   2          
+ 115   2          //xian shi 
+ 116   2          if(location==7){
+C51 COMPILER V9.54   MAIN                                                                  10/26/2023 01:14:27 PAGE 3   
+
+ 117   3            location=0;
+ 118   3            while(MatrixKey()==0){
+ 119   4              for(i=0;i<15;i++){
+ 120   5                j=80;
+ 121   5                while(j>0){
+ 122   6                  Nixie(8-i,list[0]);
+ 123   6                  Nixie(9-i,list[1]);
+ 124   6                  Nixie(10-i,list[2]);
+ 125   6                  Nixie(11-i,list[3]);
+ 126   6                  Nixie(12-i,list[4]);
+ 127   6                  Nixie(13-i,list[5]);
+ 128   6                  Nixie(14-i,list[6]);
+ 129   6                  j--;
+ 130   6                }
+ 131   5                
+ 132   5            }
+ 133   4              
+ 134   4          }
+ 135   3            
+ 136   3        }
+ 137   2      }
+ 138   1        
+ 139   1      
+ 140   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    633    ----
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
