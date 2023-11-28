@@ -1,0 +1,279 @@
+C51 COMPILER V9.54   MAIN                                                                  11/20/2023 23:13:17 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "DS1302.h"
+   4          #include "Key.h"
+   5          #include "Timer0.h"
+   6          #include "Delay.h"
+   7          #include "MatrixKey.h"
+   8          sbit BEEP = P2^0;
+   9          
+  10          
+  11          bit externalInterruptFlag = 0;
+  12          void externalInterrupt1() interrupt 2 {
+  13   1          externalInterruptFlag = 1;  // 设置标志位，表示触发了外部中断
+  14   1      }
+  15          
+  16          void Delay1ms()   //@11.0592MHz
+  17          {
+  18   1        unsigned char i, j;
+  19   1      
+  20   1        //_nop_();
+  21   1        i = 2;
+  22   1        j = 199;
+  23   1        do
+  24   1        {
+  25   2          while (--j);
+  26   2        } while (--i);
+  27   1      }
+  28          
+  29          unsigned char KeyNum,MODE,TimeSetSelect,TimeSetFlashFlag;
+  30          unsigned char alockH = 0,alockM = 0,alockS = 0;
+  31          void timer(char a,char b,char c){
+  32   1          //char i;
+  33   1          if(DS1302_Time[3]==alockH&&DS1302_Time[4]==alockM&&DS1302_Time[5]==alockS){   
+  34   2              while (1)
+  35   2              {
+  36   3                  BEEP = 1; // ???????
+  37   3                  Delay1ms();
+  38   3                  BEEP = 0; // ???????
+  39   3                  Delay1ms();
+  40   3                  if (externalInterruptFlag) {
+  41   4                  // 处理外部中断触发的操作
+  42   4                  BEEP = 1;  // 停止蜂鸣器响铃
+  43   4                  externalInterruptFlag = 0;
+  44   4                  break;       // 跳出循环
+  45   4                  }
+  46   3              }
+  47   2          }
+  48   1      }
+*** WARNING C280 IN LINE 31 OF main.c: 'a': unreferenced local variable
+*** WARNING C280 IN LINE 31 OF main.c: 'b': unreferenced local variable
+*** WARNING C280 IN LINE 31 OF main.c: 'c': unreferenced local variable
+  49          
+  50          void TimeShow(void)//时间显示功能
+  51          {
+C51 COMPILER V9.54   MAIN                                                                  11/20/2023 23:13:17 PAGE 2   
+
+  52   1        DS1302_ReadTime();//读取时间
+  53   1        timer(DS1302_Time[3],DS1302_Time[4],DS1302_Time[5]);
+  54   1        LCD_ShowNum(1,1,alockH,2);//显示年
+  55   1        LCD_ShowNum(1,4,alockM,2);//显示月
+  56   1        LCD_ShowNum(1,7,alockS,2);//显示日
+  57   1        
+  58   1        LCD_ShowNum(2,1,DS1302_Time[3],2);//显示时
+  59   1        LCD_ShowNum(2,4,DS1302_Time[4],2);//显示分
+  60   1        LCD_ShowNum(2,7,DS1302_Time[5],2);//显示秒
+  61   1      }
+  62          
+  63          void TimeSet(unsigned char key)//时间设置功能
+  64          {
+  65   1        TimeSetSelect = key;
+  66   1      //  if(KeyNum==2)//按键2按下
+  67   1      //  {
+  68   1      //    TimeSetSelect++;//设置选择位加1
+  69   1      //    TimeSetSelect%=6;//越界清零
+  70   1      //  }
+  71   1        if(KeyNum==3)//按键3按下
+  72   1        {
+  73   2          DS1302_Time[TimeSetSelect]++;//时间设置位数值加1
+  74   2          if(DS1302_Time[0]>99){DS1302_Time[0]=0;}//年越界判断
+  75   2          if(DS1302_Time[1]>12){DS1302_Time[1]=1;}//月越界判断
+  76   2          if( DS1302_Time[1]==1 || DS1302_Time[1]==3 || DS1302_Time[1]==5 || DS1302_Time[1]==7 || 
+  77   2            DS1302_Time[1]==8 || DS1302_Time[1]==10 || DS1302_Time[1]==12)//日越界判断
+  78   2          {
+  79   3            if(DS1302_Time[2]>31){DS1302_Time[2]=1;}//大月
+  80   3          }
+  81   2          else if(DS1302_Time[1]==4 || DS1302_Time[1]==6 || DS1302_Time[1]==9 || DS1302_Time[1]==11)
+  82   2          {
+  83   3            if(DS1302_Time[2]>30){DS1302_Time[2]=1;}//小月
+  84   3          }
+  85   2          else if(DS1302_Time[1]==2)
+  86   2          {
+  87   3            if(DS1302_Time[0]%4==0)
+  88   3            {
+  89   4              if(DS1302_Time[2]>29){DS1302_Time[2]=1;}//闰年2月
+  90   4            }
+  91   3            else
+  92   3            {
+  93   4              if(DS1302_Time[2]>28){DS1302_Time[2]=1;}//平年2月
+  94   4            }
+  95   3          }
+  96   2          if(DS1302_Time[3]>23){DS1302_Time[3]=0;}//时越界判断
+  97   2          if(DS1302_Time[4]>59){DS1302_Time[4]=0;}//分越界判断
+  98   2          if(DS1302_Time[5]>59){DS1302_Time[5]=0;}//秒越界判断
+  99   2        }
+ 100   1        if(KeyNum==4)//按键3按下
+ 101   1        {
+ 102   2          DS1302_Time[TimeSetSelect]--;//时间设置位数值减1
+ 103   2          if(DS1302_Time[0]<0){DS1302_Time[0]=99;}//年越界判断
+ 104   2          if(DS1302_Time[1]<1){DS1302_Time[1]=12;}//月越界判断
+ 105   2          if( DS1302_Time[1]==1 || DS1302_Time[1]==3 || DS1302_Time[1]==5 || DS1302_Time[1]==7 || 
+ 106   2            DS1302_Time[1]==8 || DS1302_Time[1]==10 || DS1302_Time[1]==12)//日越界判断
+ 107   2          {
+ 108   3            if(DS1302_Time[2]<1){DS1302_Time[2]=31;}//大月
+ 109   3            if(DS1302_Time[2]>31){DS1302_Time[2]=1;}
+ 110   3          }
+ 111   2          else if(DS1302_Time[1]==4 || DS1302_Time[1]==6 || DS1302_Time[1]==9 || DS1302_Time[1]==11)
+ 112   2          {
+ 113   3            if(DS1302_Time[2]<1){DS1302_Time[2]=30;}//小月
+C51 COMPILER V9.54   MAIN                                                                  11/20/2023 23:13:17 PAGE 3   
+
+ 114   3            if(DS1302_Time[2]>30){DS1302_Time[2]=1;}
+ 115   3          }
+ 116   2          else if(DS1302_Time[1]==2)
+ 117   2          {
+ 118   3            if(DS1302_Time[0]%4==0)
+ 119   3            {
+ 120   4              if(DS1302_Time[2]<1){DS1302_Time[2]=29;}//闰年2月
+ 121   4              if(DS1302_Time[2]>29){DS1302_Time[2]=1;}
+ 122   4            }
+ 123   3            else
+ 124   3            {
+ 125   4              if(DS1302_Time[2]<1){DS1302_Time[2]=28;}//平年2月
+ 126   4              if(DS1302_Time[2]>28){DS1302_Time[2]=1;}
+ 127   4            }
+ 128   3          }
+ 129   2          if(DS1302_Time[3]<0){DS1302_Time[3]=23;}//时越界判断
+ 130   2          if(DS1302_Time[4]<0){DS1302_Time[4]=59;}//分越界判断
+ 131   2          if(DS1302_Time[5]<0){DS1302_Time[5]=59;}//秒越界判断
+ 132   2        }
+ 133   1        //更新显示，根据TimeSetSelect和TimeSetFlashFlag判断可完成闪烁功能
+ 134   1        //if(TimeSetSelect==0 && TimeSetFlashFlag==1){LCD_ShowString(1,1,"  ");}
+ 135   1        //else {LCD_ShowNum(1,1,DS1302_Time[0],2);}
+ 136   1        //if(TimeSetSelect==1 && TimeSetFlashFlag==1){LCD_ShowString(1,4,"  ");}
+ 137   1        //else {LCD_ShowNum(1,4,DS1302_Time[1],2);}
+ 138   1        //if(TimeSetSelect==2 && TimeSetFlashFlag==1){LCD_ShowString(1,7,"  ");}
+ 139   1        //else {LCD_ShowNum(1,7,DS1302_Time[2],2);}
+ 140   1        if(TimeSetSelect==3 && TimeSetFlashFlag==1){LCD_ShowString(2,1,"  ");}
+ 141   1        else {LCD_ShowNum(2,1,DS1302_Time[3],2);}
+ 142   1        if(TimeSetSelect==4 && TimeSetFlashFlag==1){LCD_ShowString(2,4,"  ");}
+ 143   1        else {LCD_ShowNum(2,4,DS1302_Time[4],2);}
+ 144   1        if(TimeSetSelect==5 && TimeSetFlashFlag==1){LCD_ShowString(2,7,"  ");}
+ 145   1        else {LCD_ShowNum(2,7,DS1302_Time[5],2);}
+ 146   1      }
+ 147          
+ 148          
+ 149          
+ 150          void main()
+ 151          {
+ 152   1        unsigned char key=3;
+ 153   1        char MKN = 0;
+ 154   1        unsigned char alockTime[] = {0,0,0,0,0,0};
+ 155   1        unsigned char index_alockTime,loop;
+ 156   1        index_alockTime = 0;
+ 157   1        LCD_Init();
+ 158   1        DS1302_Init();
+ 159   1        Timer0Init();
+ 160   1        LCD_ShowString(1,1,"  :  :  ");//静态字符初始化显示
+ 161   1        LCD_ShowString(2,1,"  :  :  ");
+ 162   1        LCD_ShowString(1,11,"alarmT");
+ 163   1        LCD_ShowString(2,11,"nowT");
+ 164   1        EA = 1;      // 允许全局中断
+ 165   1        EX1 = 1;     // 允许外部中断1
+ 166   1        IT1 = 1;     // 设置为边沿触发方式（可以根据需要修改为电平触发方式）
+ 167   1        DS1302_SetTime();//设置时间
+ 168   1        
+ 169   1        while(1)
+ 170   1        {
+ 171   2          KeyNum=Key();//读取键码
+ 172   2          if(KeyNum==1)//按键1按下
+ 173   2          {
+ 174   3            if(MODE==0){MODE=1;TimeSetSelect=0;}//功能切换
+ 175   3            else if(MODE==1){MODE=0;DS1302_SetTime();}
+C51 COMPILER V9.54   MAIN                                                                  11/20/2023 23:13:17 PAGE 4   
+
+ 176   3          }
+ 177   2          if(KeyNum==2)//按键2按下
+ 178   2        {
+ 179   3          key++;//设置选择位加1
+ 180   3          if(key==6)key=3;//越界清零
+ 181   3        }
+ 182   2          switch(MODE)//根据不同的功能执行不同的函数
+ 183   2          {
+ 184   3            case 0:TimeShow();break;
+ 185   3            case 1:TimeSet(key);break;
+ 186   3          }
+ 187   2          //timer();
+ 188   2          
+ 189   2          MKN = MatrixKey();
+ 190   2          if(MKN){
+ 191   3            switch(MKN){
+ 192   4              case 5:
+ 193   4                MKN = 4;
+ 194   4                break;
+ 195   4              case 6:
+ 196   4                MKN = 5;
+ 197   4                break;
+ 198   4              case 7:
+ 199   4                MKN = 6;
+ 200   4                break;
+ 201   4              case 9:
+ 202   4                MKN = 7;
+ 203   4                break;
+ 204   4              case 10:
+ 205   4                MKN = 8;
+ 206   4                break;
+ 207   4              case 11:
+ 208   4                MKN = 9;
+ 209   4                break;
+ 210   4              case 14:
+ 211   4                MKN = 100;
+ 212   4                break;
+ 213   4            }
+ 214   3            if(MKN>=1&&MKN<=100){
+ 215   4                if(MKN==100){MKN=0;}
+ 216   4                alockTime[index_alockTime] = MKN;
+ 217   4                index_alockTime++;
+ 218   4                if(index_alockTime==6){index_alockTime = 0;}
+ 219   4                
+ 220   4                alockH = 10*alockTime[0]+alockTime[1];
+ 221   4                alockM = 10*alockTime[2]+alockTime[3];
+ 222   4                alockS = 10*alockTime[4]+alockTime[5];
+ 223   4                
+ 224   4                if(alockH>23){index_alockTime--;alockH=0;}
+ 225   4                if(alockM>59){index_alockTime--;alockM=0;}
+ 226   4                if(alockS>59){index_alockTime--;alockS=0;}
+ 227   4            }
+ 228   3          }
+ 229   2        }
+ 230   1      }
+*** WARNING C280 IN LINE 155 OF main.c: 'loop': unreferenced local variable
+ 231          
+ 232          void Timer0_Routine() interrupt 1
+ 233          {
+ 234   1        static unsigned int T0Count;
+ 235   1        TL0 = 0x18;   //设置定时初值
+ 236   1        TH0 = 0xFC;   //设置定时初值
+C51 COMPILER V9.54   MAIN                                                                  11/20/2023 23:13:17 PAGE 5   
+
+ 237   1        T0Count++;
+ 238   1        if(T0Count>=500)//每500ms进入一次
+ 239   1        {
+ 240   2          T0Count=0;
+ 241   2          TimeSetFlashFlag=!TimeSetFlashFlag;//闪烁标志位取反
+ 242   2        }
+ 243   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1144    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
