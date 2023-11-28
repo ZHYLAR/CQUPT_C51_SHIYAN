@@ -1,0 +1,83 @@
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 16:55:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "DS18B20.h"
+   4          #include "Delay.h"
+   5          #include "MatrixKey.h"
+   6          
+   7          float T;
+   8          int KeyNum=0;//-1 represent that no num is sent
+   9          unsigned char set_t=100;
+  10          unsigned char loop = 0;
+  11          char list[] = {-1,-1};
+  12          void main()
+  13          {
+  14   1        DS18B20_ConvertT();   //上电先转换一次温度，防止第一次读数据错误
+  15   1        Delay(1000);      //等待转换完成
+  16   1        LCD_Init();
+  17   1        LCD_ShowString(1,1,"Temperature:");
+  18   1        while(1)
+  19   1        {
+  20   2          KeyNum=MatrixKey()-1;
+  21   2          
+  22   2          if(KeyNum>=0&&loop<2){
+  23   3            LCD_ShowNum(1,loop+14,KeyNum,1);
+  24   3            list[loop] = KeyNum;
+  25   3            KeyNum=-1;
+  26   3            loop++;
+  27   3          }
+  28   2          
+  29   2          if(list[0]>=0&&list[1]>=0){
+  30   3            set_t = 10*list[0]+list[1];
+  31   3          }
+  32   2          
+  33   2          DS18B20_ConvertT(); //转换温度
+  34   2          T=DS18B20_ReadT();  //读取温度
+  35   2          if(T<0)       //如果温度小于0
+  36   2          {
+  37   3            LCD_ShowChar(2,1,'-');  //显示负号
+  38   3            T=-T;     //将温度变为正数
+  39   3          }else       //如果温度大于等于0
+  40   2          {
+  41   3            LCD_ShowChar(2,1,'+');  //显示正号
+  42   3          }
+  43   2          LCD_ShowNum(2,2,T,3);   //显示温度整数部分
+  44   2          LCD_ShowChar(2,5,'.');    //显示小数点
+  45   2          LCD_ShowNum(2,6,(unsigned long)(T*100)%100,2);//显示温度小数部分
+  46   2          
+  47   2          
+  48   2          if(T>set_t){
+  49   3            P2 = 0xff;
+  50   3            Delay(300);
+  51   3            P2 = 0x00;
+  52   3            Delay(300);
+  53   3          }
+  54   2        
+C51 COMPILER V9.54   MAIN                                                                  11/07/2023 16:55:30 PAGE 2   
+
+  55   2        }
+  56   1      }
+  57          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    303    ----
+   CONSTANT SIZE    =     13    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
