@@ -4,3 +4,7 @@
 仿真文件需要proteus版本8.11或以上\
 报告请根据自己的理解自行完成\
 仍在更新中，期末复习季会统一进行一次注释整理
+
+参考资料：\
+https://www.bilibili.com/video/BV1Mb411e7re \
+https://www.bilibili.com/video/BV1H7411n7AY
