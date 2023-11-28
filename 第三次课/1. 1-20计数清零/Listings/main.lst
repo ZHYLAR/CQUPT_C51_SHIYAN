@@ -1,0 +1,109 @@
+C51 COMPILER V9.54   MAIN                                                                  10/31/2023 14:25:04 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};//段选
+   4          
+   5          //延时
+   6          void Delay(unsigned int xms)
+   7          {
+   8   1        unsigned char i, j;
+   9   1        while(xms--)
+  10   1        {
+  11   2          i = 2;
+  12   2          j = 239;
+  13   2          do
+  14   2          {
+  15   3            while (--j);
+  16   3          } while (--i);
+  17   2        }
+  18   1      }
+  19          
+  20          
+  21          //位选
+  22          void Nixie(unsigned char Location,Number)
+  23          {
+  24   1        switch(Location)
+  25   1        {
+  26   2          case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  27   2          case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  28   2          case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  29   2          case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  30   2          case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  31   2          case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  32   2          case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  33   2          case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  34   2        }
+  35   1        P0=NixieTable[Number];  //????
+  36   1        Delay(1);       
+  37   1        P0=0x00;        
+  38   1      }
+  39          
+  40          
+  41          
+  42          void main()
+  43          {
+  44   1        unsigned int i;
+  45   1        i=0;
+  46   1        while(1)
+  47   1        {
+  48   2          //an xia K2 , i++
+  49   2          if(P3_1==0){
+  50   3            Delay(20);
+  51   3            while(P3_1==0);
+  52   3            Delay(20);  
+  53   3            i++;
+  54   3          }
+C51 COMPILER V9.54   MAIN                                                                  10/31/2023 14:25:04 PAGE 2   
+
+  55   2          
+  56   2          //geng jv i de zhi xian shi
+  57   2            if(i<10){
+  58   3              
+  59   3              while(1){
+  60   4                Nixie(8,i);
+  61   4                Nixie(7,0);
+  62   4                if(P3_1==0){
+  63   5                  break;
+  64   5                }
+  65   4              }
+  66   3            }
+  67   2            
+  68   2            if(i>=10&&i<=20){
+  69   3              while(1){
+  70   4                Nixie(8,i%10);
+  71   4                Nixie(7,i/10);
+  72   4                if(P3_1==0){
+  73   5                    break;
+  74   5                }
+  75   4              }
+  76   3            }
+  77   2            
+  78   2            if(i>20){
+  79   3              i=0;
+  80   3            }
+  81   2          
+  82   2        }
+  83   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    258    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

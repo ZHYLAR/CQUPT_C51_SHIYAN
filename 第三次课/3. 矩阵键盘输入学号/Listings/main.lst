@@ -1,0 +1,90 @@
+C51 COMPILER V9.54   MAIN                                                                  10/26/2023 00:31:49 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "MatrixKey.h"
+   4          
+   5          unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+   6          
+   7          void Nixie(unsigned char Location,Number)
+   8          {
+   9   1        switch(Location)
+  10   1        {
+  11   2          case 1:P2_4=1;P2_3=1;P2_2=1;break;
+  12   2          case 2:P2_4=1;P2_3=1;P2_2=0;break;
+  13   2          case 3:P2_4=1;P2_3=0;P2_2=1;break;
+  14   2          case 4:P2_4=1;P2_3=0;P2_2=0;break;
+  15   2          case 5:P2_4=0;P2_3=1;P2_2=1;break;
+  16   2          case 6:P2_4=0;P2_3=1;P2_2=0;break;
+  17   2          case 7:P2_4=0;P2_3=0;P2_2=1;break;
+  18   2          case 8:P2_4=0;P2_3=0;P2_2=0;break;
+  19   2        }
+  20   1        P0=NixieTable[Number];  
+  21   1        Delay(1);       
+  22   1        P0=0x00;        
+  23   1      }
+  24          
+  25          
+  26          char KeyNum=-1;//-1 represent that no num is sent
+  27          
+  28          void main()
+  29          {
+  30   1        char location=0;
+  31   1        unsigned char list[]={0,0,0,0,0,0,0,0}; 
+  32   1        unsigned char loop = 200;
+  33   1        while(1)
+  34   1        {
+  35   2          KeyNum=MatrixKey()-1;
+  36   2          if(KeyNum>=0){
+  37   3              list[location]=KeyNum;
+  38   3              
+  39   3              while(loop>0){
+  40   4                Nixie(8,KeyNum);
+  41   4                loop--;
+  42   4              }
+  43   3              loop = 200;
+  44   3            
+  45   3              //Nixie(location,list[location]);
+  46   3              location++;
+  47   3          }
+  48   2          if(location==8){
+  49   3              location=0;
+  50   3              while(MatrixKey()==0){
+  51   4                Nixie(1,list[0]);
+  52   4                Nixie(2,list[1]);
+  53   4                Nixie(3,list[2]);
+  54   4                Nixie(4,list[3]);
+C51 COMPILER V9.54   MAIN                                                                  10/26/2023 00:31:49 PAGE 2   
+
+  55   4                Nixie(5,list[4]);
+  56   4                Nixie(6,list[5]);
+  57   4                Nixie(7,list[6]);
+  58   4                Nixie(8,list[7]);
+  59   4              }
+  60   3          }
+  61   2          
+  62   2          
+  63   2        }
+  64   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    274    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

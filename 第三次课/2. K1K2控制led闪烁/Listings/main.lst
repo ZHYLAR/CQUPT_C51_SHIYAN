@@ -1,0 +1,123 @@
+C51 COMPILER V9.54   MAIN                                                                  10/24/2023 16:39:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          //unsigned char NixieTable[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};//¶ÎÑ¡
+   4          
+   5          unsigned char ledtable[]={0xFE,0xFD,0xFB,0xF7,0xEF,0xDF,0xBF,0x7F};
+   6          
+   7          //ÑÓÊ±
+   8          void Delay(unsigned int xms)
+   9          {
+  10   1        unsigned char i, j;
+  11   1        while(xms--)
+  12   1        {
+  13   2          i = 2;
+  14   2          j = 239;
+  15   2          do
+  16   2          {
+  17   3            while (--j);
+  18   3          } while (--i);
+  19   2        }
+  20   1      }
+  21          
+  22          
+  23          
+  24          
+  25          void main()
+  26          {
+  27   1        unsigned char i=0;
+  28   1        //P2 = ledtable[1];
+  29   1        
+  30   1        while(1){
+  31   2          
+  32   2        
+  33   2        //4 ge LED shanshuo
+  34   2        if(P3_0==0){
+  35   3          Delay(80);
+  36   3          if(P3_1==1){
+  37   4            i=5;
+  38   4            while(i>0){
+  39   5            //P2 = ledtable[0];//test state code
+  40   5              P2 = 0x55;//  01010101;
+  41   5              Delay(250);
+  42   5              P2 = 0xFF;
+  43   5              Delay(250);
+  44   5            i--;
+  45   5            }
+  46   4          }
+  47   3        }
+  48   2        
+  49   2      
+  50   2        
+  51   2         if(P3_1==0){
+  52   3          Delay(80);
+  53   3          if(P3_0==1){
+  54   4            i=10;
+C51 COMPILER V9.54   MAIN                                                                  10/24/2023 16:39:59 PAGE 2   
+
+  55   4            while(i>0){
+  56   5            //P2 = ledtable[1];
+  57   5              P2 = 0;
+  58   5              Delay(250);
+  59   5              P2 = 0XFF;
+  60   5              Delay(250);
+  61   5              i--;
+  62   5            }
+  63   4          }
+  64   3        }
+  65   2        
+  66   2        
+  67   2         if(P3_1==0){
+  68   3          //Delay(10);
+  69   3          if(P3_0==0){
+  70   4            i=7;
+  71   4            
+  72   4            while(P3_1==0&&P3_0==0){
+  73   5              P2 = ledtable[i];
+  74   5              Delay(200);
+  75   5              i--;
+  76   5              if(i==-1){
+  77   6                i=7;
+  78   6              }
+  79   5            }
+  80   4            
+  81   4          }
+  82   3        }
+  83   2        
+  84   2      
+  85   2          if(P3_1==1&&P3_0==1){
+  86   3            P2 = ledtable[0];
+  87   3            Delay(300);
+  88   3            P2 = 0xFF;
+  89   3            Delay(200);
+  90   3          }
+  91   2        
+  92   2        
+  93   2        }
+  94   1        
+  95   1        
+  96   1        
+  97   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    149    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
