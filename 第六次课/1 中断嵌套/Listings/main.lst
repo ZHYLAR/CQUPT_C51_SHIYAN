@@ -1,0 +1,99 @@
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:34:54 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          
+   2          //流水灯效果，两种外部中断实现了不同的闪烁效果。
+   3          #include <REGX52.H>  // 包含单片机头文件
+   4          #define uchar unsigned char  // 定义无符号字符类型
+   5          #define uint unsigned int    // 定义无符号整型类型
+   6            
+   7          uchar liushui_code[9] = {0xff,0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f};  // 定义流水码数组
+   8          
+   9          void Delay_ms(uint ms)
+  10          {
+  11   1        uchar i;
+  12   1        while(ms--)
+  13   1          for(i=0;i<123;i++);
+  14   1      }
+  15          // 延时函数，延时ms毫秒
+  16          
+  17          void main()
+  18          {
+  19   1      
+  20   1        EX0 = 1;  // 使能外部中断0
+  21   1        EX1 = 1;  // 使能外部中断1
+  22   1        EA = 1;   // 全局中断使能
+  23   1        
+  24   1        PX0 = 0;  // 设置外部中断0的优先级为低
+  25   1        PX1 = 1;  // 设置外部中断1的优先级为高
+  26   1      
+  27   1      
+  28   1        IT0 = 1;  // 设置外部中断0为下降沿触发
+  29   1        IT1 = 1;  // 设置外部中断1为下降沿触发
+  30   1        
+  31   1        while(1)
+  32   1        {
+  33   2          uint i;
+  34   2          for(i=0;i<9;i++)
+  35   2          {
+  36   3            Delay_ms(500);  // 延时500毫秒
+  37   3            P2 = liushui_code[i];  // 将流水码输出到P2口
+  38   3          }
+  39   2        
+  40   2        }
+  41   1      }
+  42          // 主函数，循环输出流水灯效果
+  43          
+  44          
+  45          void int0(void)  interrupt 0 using 0
+  46          {
+  47   1        while(1)
+  48   1        {
+  49   2          P2 = 0x0f;  // 将P2口设置为低四位为高电平，高四位为低电平
+  50   2          Delay_ms(500);  // 延时500毫秒
+  51   2          P2 = 0xf0;  // 将P2口设置为低四位为低电平，高四位为高电平
+  52   2          Delay_ms(500);  // 延时500毫秒
+  53   2        
+  54   2        }
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:34:54 PAGE 2   
+
+  55   1      
+  56   1      }
+  57          // 外部中断0的中断服务函数，实现了一个交替闪烁的效果
+  58          
+  59          
+  60          void int1(void)  interrupt 2 using 1
+  61          {
+  62   1        uint m;
+  63   1        for(m=0;m<6;m++)
+  64   1        {
+  65   2          P2 = 0xff;  // 将P2口设置为全高电平
+  66   2          Delay_ms(500);  // 延时500毫秒
+  67   2          P2 = 0;  // 将P2口设置为全低电平
+  68   2          Delay_ms(500);  // 延时500毫秒
+  69   2        }
+  70   1      
+  71   1      }
+  72          // 外部中断1的中断服务函数，实现了一个闪烁的效果
+  73          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    140    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
