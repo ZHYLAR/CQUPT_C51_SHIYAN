@@ -1,0 +1,176 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/14/2023  22:12:23  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\C51\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj TO .\Objects\cl2 PRINT (.\Listings\cl2.m51) RAMSIZE (2
+>> 56)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\main.obj (MAIN)
+  E:\C51\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\cl2 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000AH     UNIT         ?DT?MAIN
+            IDATA   0012H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0071H     UNIT         ?PR?_NIXIE?MAIN
+            CODE    08FDH     0042H     UNIT         ?PR?MAIN?MAIN
+            CODE    093FH     0015H     UNIT         ?PR?_DELAY?MAIN
+            CODE    0954H     000DH     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\cl2 (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?_NIXIE?MAIN
+
+?PR?_NIXIE?MAIN
+  +--> ?PR?_DELAY?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\cl2 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/14/2023  22:12:23  PAGE 2
+
+
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:0012H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0890H         PUBLIC        _Nixie
+  D:0080H         PUBLIC        P0
+  B:00A0H.2       PUBLIC        P2_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:00A0H.4       PUBLIC        P2_4
+  C:08FDH         PUBLIC        main
+  D:0008H         PUBLIC        NixieTable
+  C:093FH         PUBLIC        _Delay
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:093FH         LINE#         7
+  C:093FH         LINE#         8
+  C:093FH         LINE#         10
+  C:0949H         LINE#         11
+  C:0949H         LINE#         12
+  C:094BH         LINE#         13
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/14/2023  22:12:23  PAGE 3
+
+
+  C:094DH         LINE#         15
+  C:094DH         LINE#         16
+  C:094FH         LINE#         17
+  C:0951H         LINE#         18
+  C:0953H         LINE#         19
+  -------         ENDPROC       _DELAY
+  -------         PROC          L?0029
+  -------         ENDPROC       L?0029
+  -------         PROC          _NIXIE
+  D:0007H         SYMBOL        Location
+  D:0004H         SYMBOL        Number
+  C:0890H         LINE#         22
+  C:0890H         LINE#         23
+  C:0890H         LINE#         25
+  C:08BDH         LINE#         26
+  C:08BDH         LINE#         27
+  C:08C1H         LINE#         28
+  C:08C5H         LINE#         29
+  C:08C9H         LINE#         30
+  C:08CDH         LINE#         31
+  C:08D5H         LINE#         32
+  C:08DDH         LINE#         33
+  C:08E5H         LINE#         34
+  C:08EBH         LINE#         35
+  C:08EBH         LINE#         36
+  C:08F2H         LINE#         37
+  C:08F9H         LINE#         38
+  C:08FCH         LINE#         39
+  -------         ENDPROC       _NIXIE
+  -------         PROC          MAIN
+  C:08FDH         LINE#         41
+  C:08FDH         LINE#         42
+  C:08FDH         LINE#         44
+  C:08FDH         LINE#         45
+  C:08FDH         LINE#         46
+  C:0902H         LINE#         47
+  C:0907H         LINE#         48
+  C:0910H         LINE#         49
+  C:0919H         LINE#         50
+  C:0922H         LINE#         51
+  C:092BH         LINE#         52
+  C:0934H         LINE#         53
+  C:093DH         LINE#         54
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00E3H BYTE (11%) *
+******************************************************************************
+
+Program Size: data=19.0 xdata=0 code=356
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,103 @@
+C51 COMPILER V9.54   MAIN                                                                  10/17/2023 14:51:14 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          void Delay(unsigned int xms);
+   3          void light(unsigned char mode);
+   4          void Delay500ms();
+   5          
+   6          
+   7          void Delay(unsigned int xms) //延时函数
+   8          {
+   9   1        unsigned char i, j;
+  10   1        while(xms--)
+  11   1        {
+  12   2          i = 2;
+  13   2          j = 239;
+  14   2          do
+  15   2          {
+  16   3            while (--j);
+  17   3          } while (--i);
+  18   2        }
+  19   1      }
+  20          
+  21          void Delay500ms(){
+  22   1          Delay(500);
+  23   1      }
+  24          
+  25          void light(unsigned char mode){
+  26   1            
+  27   1        //左流动
+  28   1        if(mode&1){ 
+  29   2            P2=0xFE;//1111 1110
+  30   2            Delay(100);
+  31   2            P2=0xFD;//1111 1101
+  32   2            Delay(100);
+  33   2            P2=0xFB;//1111 1011
+  34   2            Delay(100);
+  35   2            P2=0xF7;//1111 0111
+  36   2            Delay(100);
+  37   2            P2=0xEF;//1110 1111
+  38   2            Delay(100);
+  39   2            P2=0xDF;//1101 1111
+  40   2            Delay(100);
+  41   2            P2=0xBF;//1011 1111
+  42   2            Delay(100);
+  43   2            P2=0x7F;//0111 1111
+  44   2        }else{
+  45   2            P2=0x7F;//1111 1110
+  46   2            Delay(100);
+  47   2            P2=0xBF;//1111 1101
+  48   2            Delay(100);
+  49   2            P2=0xDF;//1111 1011
+  50   2            Delay(100);
+  51   2            P2=0xEF;//1111 0111
+  52   2            Delay(100);
+  53   2            P2=0xF7;//1110 1111
+  54   2            Delay(100);
+C51 COMPILER V9.54   MAIN                                                                  10/17/2023 14:51:14 PAGE 2   
+
+  55   2            P2=0xFB;//1101 1111
+  56   2            Delay(100);
+  57   2            P2=0xFD;//1011 1111
+  58   2            Delay(100);
+  59   2            P2=0xFE;//0111 1111
+  60   2        }
+  61   1            
+  62   1      }
+  63          
+  64          unsigned char LEDNum;
+  65          
+  66          void main()
+  67          {
+  68   1        
+  69   1        //P2=~0x01;       //turn on LED1
+  70   1        while(1)
+  71   1        {
+  72   2          light(1);
+  73   2          light(2);
+  74   2          }
+  75   1        }
+  76          
+  77          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    138    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
