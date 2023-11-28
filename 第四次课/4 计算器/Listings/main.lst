@@ -1,0 +1,135 @@
+C51 COMPILER V9.54   MAIN                                                                  11/04/2023 23:58:54 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "Delay.h"
+   4          #include "MatrixKey.h"
+   5          
+   6            //LCD_ShowChar(1,1,'A');      //在1行1列显示字符A
+   7            //LCD_ShowString(1,3,"Hello");  //在1行3列显示字符串Hello
+   8            //LCD_ShowNum(1,9,1,1);     //在1行9列显示数字66，长度为2
+   9            //LCD_ShowSignedNum(1,12,-88,2);  //在1行12列显示有符号数字-88，长度为2
+  10            //LCD_ShowHexNum(2,1,0xA5,2);   //在2行1列显示十六进制数字0xA5，长度为2
+  11            //LCD_ShowBinNum(2,4,0xA5,8);   //在2行4列显示二进制数字0xA5，长度为8
+  12          //  LCD_ShowChar(2,13,0xDF);    //在2行13列显示编码为0xDF的字符
+  13            //LCD_ShowChar(2,14,'C');     //在2行14列显示字符C
+  14          unsigned int length(unsigned int res){
+  15   1        if(res>=100){
+  16   2          return 3;
+  17   2        }
+  18   1        else if(res<100&&res>=10){
+  19   2          return 2;
+  20   2        }
+  21   1        else if(res<10){
+  22   2          return 1;
+  23   2        }
+  24   1      }
+  25          
+  26          void main()
+  27          {
+  28   1        int KeyNum=0;//-1 represent that no num is sent
+  29   1        int i=1;
+  30   1        char op = 0;
+  31   1        unsigned int n1,n2,res;
+  32   1        unsigned int n[5]={0};
+  33   1        LCD_Init();
+  34   1        while(1)
+  35   1        {
+  36   2          KeyNum=MatrixKey()-1;
+  37   2          
+  38   2          if(KeyNum==10){
+  39   3            op='+';
+  40   3            LCD_ShowChar(1,i,op);
+  41   3            KeyNum=-1;
+  42   3            n[i-1] = op;
+  43   3            i++;
+  44   3          }
+  45   2          else if(KeyNum==11){
+  46   3            op='-';
+  47   3            LCD_ShowChar(1,i,op);
+  48   3            n[i-1] = op;
+  49   3            KeyNum=-1;
+  50   3            i++;
+  51   3          }
+  52   2          else if(KeyNum==12){
+  53   3            op='*';
+  54   3            LCD_ShowChar(1,i,op); 
+C51 COMPILER V9.54   MAIN                                                                  11/04/2023 23:58:54 PAGE 2   
+
+  55   3            n[i-1] = op;
+  56   3            KeyNum=-1;
+  57   3            i++;
+  58   3          }
+  59   2          else if(KeyNum==13){
+  60   3            op='/';
+  61   3            LCD_ShowChar(1,i,op);
+  62   3            n[i-1] = op;
+  63   3            KeyNum=-1;
+  64   3            i++;
+  65   3          }
+  66   2            
+  67   2      
+  68   2          else if(KeyNum>=0&&KeyNum<10){
+  69   3            LCD_ShowNum(1,i,KeyNum,1);
+  70   3            n[i-1] = KeyNum;
+  71   3            KeyNum=-1;
+  72   3            i++;
+  73   3          }
+  74   2          if(i==6){
+  75   3            
+  76   3            n1 = 10*n[0]+n[1];
+  77   3            n2 = 10*n[3]+n[4];
+  78   3            switch(op){
+  79   4              case '+':
+  80   4                res = n1+n2;
+  81   4                break;
+  82   4              case '-':
+  83   4                res = n1-n2;
+  84   4                break;
+  85   4              case '*':
+  86   4                res = n1*n2;
+  87   4                break;
+  88   4              case '/':
+  89   4                res = n1/n2;
+  90   4                break;
+  91   4            }
+  92   3            LCD_ShowNum(2,1,res,length(res));   
+  93   3            i=1;
+  94   3            while(1){
+  95   4              if(MatrixKey()!=0)
+  96   4                {
+  97   5                  LCD_ShowString(1,1,"          ");
+  98   5                  LCD_ShowString(2,1,"          ");
+  99   5                  break;
+ 100   5                }
+ 101   4            }
+ 102   3            
+ 103   3            
+ 104   3          }
+ 105   2        }
+ 106   1      }
+*** WARNING C291 IN LINE 24 OF main.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    551    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  11/04/2023 23:58:54 PAGE 3   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
