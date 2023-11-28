@@ -1,0 +1,248 @@
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:39:54 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\C51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "Key.h"
+   4          #include "Nixie.h"
+   5          #include "Timer0.h"
+   6          #include "display.h"
+   7          //#include "Buzzer.h"
+   8          
+   9          unsigned char second=50,min,hour,min0,hour0=12,count,second0;
+  10          unsigned int i,is;
+  11          
+  12          sbit key0=P3^1;
+  13          sbit key1=P3^0;
+  14          sbit key2=P3^2;
+  15          sbit key3=P3^3;
+  16          sbit buzzer=P1^5;
+  17          
+  18          unsigned char now_alock = 0;
+  19          unsigned char externalInterruptFlag = 0;
+  20          void externalInterrupt1() interrupt 2 {
+  21   1          //P2 = 0;
+  22   1          if(!now_alock){externalInterruptFlag = 0;}
+  23   1          
+  24   1          if(now_alock){
+  25   2            externalInterruptFlag = 1;
+  26   2            now_alock = 0;
+  27   2          }  // 设置标志位，表示触发了外部中断
+  28   1      }
+  29          
+  30          void Buzzer_Time(unsigned int ms)
+  31          {
+  32   1        unsigned int s;
+  33   1        unsigned int i;
+  34   1        now_alock = 1;
+  35   1        while(1){
+  36   2          buzzer=1;
+  37   2          Delay(1);
+  38   2          buzzer=0;
+  39   2          Delay(1);
+  40   2          if (externalInterruptFlag) {
+  41   3              s = second;
+  42   3                // 处理外部中断触发的操作
+  43   3              buzzer=0; // 停止蜂鸣器响铃
+  44   3              break;       // 跳出循环
+  45   3          }
+  46   2        }
+  47   1      }
+*** WARNING C280 IN LINE 30 OF main.c: 'ms': unreferenced local variable
+*** WARNING C280 IN LINE 33 OF main.c: 'i': unreferenced local variable
+  48          
+  49          //矩阵键盘扫描
+  50          unsigned char Keyscan()
+  51          {
+  52   1        unsigned char KeyNumber=0;
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:39:54 PAGE 2   
+
+  53   1        
+  54   1        P1=0xFF;
+  55   1        P1_3=0;
+  56   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=1;}
+  57   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=5;}
+  58   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=9;}
+  59   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=13;}
+  60   1        
+  61   1        P1=0xFF;
+  62   1        P1_2=0;
+  63   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=2;}
+  64   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=6;}
+  65   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=10;}
+  66   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=14;}
+  67   1        
+  68   1        P1=0xFF;
+  69   1        P1_1=0;
+  70   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=3;}
+  71   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=7;}
+  72   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=11;}
+  73   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=15;}
+  74   1        
+  75   1        P1=0xFF;
+  76   1        P1_0=0;
+  77   1        if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=4;}
+  78   1        if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=8;}
+  79   1        if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=12;}
+  80   1        if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=16;}
+  81   1        
+  82   1        return KeyNumber;
+  83   1      }
+  84          
+  85          //设置闹钟 key16视作输入0
+  86          void set(void)
+  87          {
+  88   1        unsigned char keynum,temp,key_num;
+  89   1        keynum=2;
+  90   1        while(1)
+  91   1        {
+  92   2          if(key2==0)
+  93   2          {
+  94   3            keynum=2;
+  95   3          }
+  96   2          if(key3==0)
+  97   2          {
+  98   3            keynum=3;
+  99   3          }
+ 100   2          if(key1==0)
+ 101   2          {
+ 102   3            keynum=1;
+ 103   3          }
+ 104   2          display(1, hour0/10);
+ 105   2          display(2, hour0%10);
+ 106   2          display(3, 10);
+ 107   2          display(4, min0/10);
+ 108   2          display(5, min0%10);
+ 109   2          display(6, keynum);
+ 110   2          display(7, second0/10);
+ 111   2          display(8, second0%10);
+ 112   2          if(key0==0)
+ 113   2          {
+ 114   3            return;
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:39:54 PAGE 3   
+
+ 115   3          }
+ 116   2          temp=Keyscan();
+ 117   2          if(temp)
+ 118   2          {
+ 119   3            if((temp<10||temp==16)&&keynum==2)
+ 120   3            {
+ 121   4              if(temp==16)
+ 122   4              {
+ 123   5                min0=min0*10;
+ 124   5              }
+ 125   4              else
+ 126   4              {
+ 127   5                min0=min0*10+temp;
+ 128   5              }
+ 129   4            }
+ 130   3            if((temp<10||temp==16)&&keynum==3)
+ 131   3            {
+ 132   4              if(temp==16)
+ 133   4              {
+ 134   5                hour0=hour0*10;
+ 135   5              }
+ 136   4              else
+ 137   4              {
+ 138   5                hour0=hour0*10+temp;
+ 139   5              }
+ 140   4            }
+ 141   3            if((temp<10||temp==16)&&keynum==1)
+ 142   3            {
+ 143   4              if(temp==16)
+ 144   4              {
+ 145   5                second0=second0*10;
+ 146   5              }
+ 147   4              else
+ 148   4              {
+ 149   5                second0=second0*10+temp;
+ 150   5              }
+ 151   4            }
+ 152   3          }
+ 153   2        }
+ 154   1      }
+*** WARNING C280 IN LINE 88 OF main.c: 'key_num': unreferenced local variable
+ 155          
+ 156          void main()
+ 157          {
+ 158   1        EA = 1;
+ 159   1        IT1 = 1;
+ 160   1        EX1 = 1;
+ 161   1        PX1 = 1;
+ 162   1        is=1;
+ 163   1        Timer0_Init();
+ 164   1        buzzer=0;
+ 165   1        while(1)
+ 166   1        {
+ 167   2          display(1, hour/10);
+ 168   2          display(2, hour%10);
+ 169   2          display(3, 10);
+ 170   2          display(4, min/10);
+ 171   2          display(5, min%10);
+ 172   2          display(6, 10);
+ 173   2          display(7, second/10);
+ 174   2          display(8, second%10);
+ 175   2          if(key0==0)
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 10:39:54 PAGE 4   
+
+ 176   2          {
+ 177   3            set();
+ 178   3          }
+ 179   2        }
+ 180   1      }
+ 181          
+ 182          //定时器服务函数
+ 183          void Timer0_Routine(void) interrupt 1
+ 184          {
+ 185   1        TL0 = 0xA0;   //设置定时初值
+ 186   1        TH0 = 0x15;   //设置定时初值
+ 187   1        if(i==200)  //计数值小于比较值
+ 188   1        {
+ 189   2          second++;
+ 190   2          i=0;
+ 191   2          if(second==60)
+ 192   2          {
+ 193   3            min++;
+ 194   3            if(min==60)
+ 195   3            {
+ 196   4              hour++;
+ 197   4              min=0;
+ 198   4              if(hour==24)
+ 199   4              {
+ 200   5                hour=0;
+ 201   5              }
+ 202   4            }
+ 203   3            second=0;
+ 204   3          }
+ 205   2          if(min==min0&&hour0==hour&&is)
+ 206   2          {
+ 207   3            Buzzer_Time(500);
+ 208   3          }
+ 209   2          if(P3_0==0)
+ 210   2          {
+ 211   3            is=0;
+ 212   3          }
+ 213   2        }
+ 214   1        i++;
+ 215   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1016    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)
