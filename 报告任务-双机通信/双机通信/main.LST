@@ -1,0 +1,93 @@
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 19:56:10 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          //#include "reg51.h"
+   2          #include <regx52.h>
+   3          #include <MatrixKey.h>
+   4          #include <Delay.h>
+   5          //宏定义
+   6          #define uchar unsigned char
+   7          #define uint unsigned int
+   8          //延时函数
+   9          void time(uint ucMs);
+  10          //串口初始化
+  11          void initUart(unsigned int baud);
+  12          //参数定义
+  13          uchar ucCounter;
+  14          
+  15          void main(void)
+  16          {
+  17   1        uchar counter=0;
+  18   1        uchar keynum;
+  19   1        time(1);
+  20   1        initUart(9600);//串口进行初始化
+  21   1        while(1)
+  22   1        {
+  23   2          while(1){
+  24   3          keynum = MatrixKey();
+  25   3          if(keynum>0) 
+  26   3            {
+  27   4              SBUF=keynum;//将参数给寄存器
+  28   4              break;
+  29   4            }
+  30   3          }
+  31   2          //SBUF=counter;
+  32   2          while(TI==0);//发送中断，发送8位时为1
+  33   2          TI=0;//软件置0
+  34   2          //while(RI==0);//接受中断，接受8位时为1
+  35   2          //RI=0;//软件置0
+  36   2          //counter++;
+  37   2          //time(500);//延时
+  38   2      //    if(SBUF==counter)//如果接受到的等于counter
+  39   2      //    {
+  40   2      //      P2=counter;//数码管显示counter
+  41   2      //      if(++counter>15)counter=0;//大于15清零
+  42   2      //      time(500);//延时
+  43   2      //    }
+  44   2        }
+  45   1      }
+  46          
+  47          
+  48          void initUart(unsigned int baud)
+  49          {
+  50   1        SM0=1;SM1=0;REN=1;//8位波特率可变，允许串口接受信号
+  51   1        TMOD|=0X20;//定时器1为8位自动重装载
+  52   1        PCON=0X00;//让SMOD==0
+  53   1        TR1=1;//打开定时器1
+  54   1        EA=1;ET1=1;//打开串口中断
+  55   1        TH1=256-11059200/12/32/baud;//设置定时器初值
+C51 COMPILER V9.54   MAIN                                                                  11/28/2023 19:56:10 PAGE 2   
+
+  56   1        TL1=256-11059200/12/32/baud;//设置定时器初值
+  57   1      }
+  58          
+  59          //延时函数
+  60          void time(uint ucMs)
+  61          {
+  62   1        while(ucMs!=0)
+  63   1        {
+  64   2          for(ucCounter=0;ucCounter<239;ucCounter++);
+  65   2          ucMs-=1;
+  66   2        }
+  67   1      }
+  68          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

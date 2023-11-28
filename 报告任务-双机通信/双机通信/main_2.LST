@@ -1,0 +1,83 @@
+C51 COMPILER V9.54   MAIN_2                                                                11/28/2023 20:16:45 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN_2
+OBJECT MODULE PLACED IN main_2.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main_2.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #include <LCD1602.h>
+   3          //宏定义
+   4          #define uchar unsigned char
+   5          #define uint unsigned int
+   6          //延时函数
+   7          void time(uint ucMs);
+   8          //串口初始化
+   9          void initUart(unsigned int baud);
+  10          //参数定义
+  11          uchar ucCounter;
+  12          
+  13          void main(void)
+  14          {
+  15   1        uchar i=1;
+  16   1        uchar receive;
+  17   1        time(1);
+  18   1        initUart(9600);//串口初始化
+  19   1        //LCD_ShowNum(unsigned char Line,unsigned char Column,unsigned int Number,unsigned char Length);
+  20   1        LCD_Init();
+  21   1      //  LCD_ShowNum(1,1,20222,5);
+  22   1      //  LCD_ShowNum(1,6,10071,5);
+  23   1        while(1)
+  24   1        {
+  25   2          while(RI==0);//接受8为置1
+  26   2          RI=0;
+  27   2          receive=SBUF; //接受信号
+  28   2          LCD_ShowNum(1,i,(int)receive,1);
+  29   2          i++;
+  30   2          if(i==12){i=1;LCD_ShowString(1,1,"           ");}
+  31   2          //SBUF=receive;//将接受的发出去
+  32   2          //while(TI==0);//发送8位置1
+  33   2          //TI=0;
+  34   2          //P2=receive;//数码管显示信号
+  35   2        }
+  36   1      }
+  37          
+  38          //串口初始化
+  39          void initUart(unsigned int baud)
+  40          {
+  41   1        SM0=1;SM1=0;REN=1;//8位波特率可变，允许串口接受信号
+  42   1        TMOD|=0X20;//定时器1为8位自动重装载
+  43   1        PCON=0X00;//让SMOD==0
+  44   1        TR1=1;//打开定时器1
+  45   1        EA=1;ET1=1;//打开串口中断
+  46   1        TH1=256-11059200/12/32/baud;//设置定时器初值
+  47   1        TL1=256-11059200/12/32/baud;//设置定时器初值
+  48   1      }
+  49          
+  50          //延时函数
+  51          void time(uint ucMs)
+  52          {
+  53   1        while(ucMs!=0)
+  54   1        {
+  55   2          for(ucCounter=0;ucCounter<239;ucCounter++);
+C51 COMPILER V9.54   MAIN_2                                                                11/28/2023 20:16:45 PAGE 2   
+
+  56   2          ucMs-=1;
+  57   2        }
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    139    ----
+   CONSTANT SIZE    =     12    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
